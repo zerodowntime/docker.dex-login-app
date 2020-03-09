@@ -212,6 +212,15 @@ func main() {
 }
 
 func (a *app) handleIndex(w http.ResponseWriter, r *http.Request) {
+	if os.Getenv("DEX_SKIP_FORM") == "yes" {
+		loginURL := "/login?skip"
+		loginURL = loginURL + "&extra_scopes=" + os.Getenv("DEX_EXTRA_SCOPES");
+		loginURL = loginURL + "&cross_client=" + os.Getenv("DEX_CROSS_CLIENT");
+		loginURL = loginURL + "&connector_id=" + os.Getenv("DEX_CONNECTOR_ID");
+		loginURL = loginURL + "&offline_access=" + os.Getenv("DEX_OFFLINE_ACCESS");
+		http.Redirect(w, r, loginURL, http.StatusSeeOther)
+		return
+	}
 	renderIndex(w)
 }
 
